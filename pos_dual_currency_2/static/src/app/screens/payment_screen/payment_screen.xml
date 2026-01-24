@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <!-- <t t-name="pos_dual_currency.PaymentScreen" t-inherit="point_of_sale.PaymentScreen" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('payment-due-total')]" position="after">
+            <div t-if="dualCurrencyEnabled" class="dual-currency-payment">
+                <t t-if="dualCurrencyConfig.displayPosition === 'below'">
+                    <div class="dual-currency-due below">
+                        <span class="dual-currency-label">≈ </span>
+                        <span class="dual-currency-amount" t-esc="dualCurrencyRemaining"/>
+                    </div>
+                </t>
+                <t t-if="dualCurrencyConfig.displayPosition === 'beside'">
+                    <span class="dual-currency-due beside">
+                        <span class="dual-currency-separator"> / </span>
+                        <span class="dual-currency-amount" t-esc="dualCurrencyRemaining"/>
+                    </span>
+                </t>
+            </div>
+        </xpath>
+    </t> -->
+</templates>

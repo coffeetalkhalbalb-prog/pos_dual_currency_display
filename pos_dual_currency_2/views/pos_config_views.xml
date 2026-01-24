@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_config_form_dual_currency" model="ir.ui.view">
+        <field name="name">pos.config.form.dual.currency</field>
+        <field name="model">pos.config</field>
+        <!-- In Odoo 19, use the res_config_settings view or the standard form view -->
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Targeting the sheet directly as Odoo 19 POS settings are often flat -->
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Dual Currency" name="dual_currency">
+                        <group>
+                            <group string="Dual Currency Settings">
+                                <field name="enable_dual_currency"/>
+                                <field name="dual_currency_id" 
+                                       invisible="not enable_dual_currency" 
+                                       required="enable_dual_currency" 
+                                       options="{'no_create': True}"/>
+                                    <field name="dual_currency_rate_type" 
+                                        widget="radio" 
+                                        invisible="not enable_dual_currency"/>
+                                    <field name="dual_currency_rate" 
+                                        invisible="not enable_dual_currency" 
+                                        readonly="dual_currency_rate_type == 'auto'"/>
+                                    <field name="dual_currency_rounding"
+                                        string="Rounding Factor"
+                                        invisible="not enable_dual_currency"/>
+                                    <field name="dual_currency_position" 
+                                        widget="radio" 
+                                        invisible="not enable_dual_currency"/>
+                            </group>
+                            <group string="Information">
+                                <div class="alert alert-info" invisible="not enable_dual_currency">
+                                    <p><strong>How it works:</strong></p>
+                                    <ul>
+                                        <li>Primary total converts to secondary currency</li>
+                                        <li>Rate can be manual or automatic</li>
+                                        <li>Shown on POS screen and receipt</li>
+                                    </ul>
+                                </div>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+</odoo>
