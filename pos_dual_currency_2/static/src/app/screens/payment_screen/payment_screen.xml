@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
-    <!-- <t t-name="pos_dual_currency.PaymentScreen" t-inherit="point_of_sale.PaymentScreen" t-inherit-mode="extension">
-        <xpath expr="//div[hasclass('payment-due-total')]" position="after">
-            <div t-if="dualCurrencyEnabled" class="dual-currency-payment">
-                <t t-if="dualCurrencyConfig.displayPosition === 'below'">
-                    <div class="dual-currency-due below">
-                        <span class="dual-currency-label">≈ </span>
-                        <span class="dual-currency-amount" t-esc="dualCurrencyRemaining"/>
+    <t t-name="pos_dual_currency.PaymentScreen" t-inherit="point_of_sale.PaymentScreen" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('payment-summary')]" position="inside">
+            <section t-if="dualCurrencyEnabled" t-attf-class="paymentlines-container border-top pt-3 {{ !isComplete ? 'text-danger' : 'text-success'}}">
+                <div class="payment-status-container d-flex flex-column-reverse flex-lg-row justify-content-between fs-2">
+                    <div class="payment-status-amount d-flex justify-content-between flex-grow-1" t-attf-class=" {{ isIncompleteAndPositive ? 'text-danger' : 'text-success' }}">
+                        <span class="label pe-2" t-out="statusText"/>
+                        <span class="amount align-self-end me-5 pe-5 highlight fw-bolder" t-att-amount="amountText">
+                            <PriceFormatter price="amountText" />
+                        </span>
                     </div>
-                </t>
-                <t t-if="dualCurrencyConfig.displayPosition === 'beside'">
-                    <span class="dual-currency-due beside">
-                        <span class="dual-currency-separator"> / </span>
-                        <span class="dual-currency-amount" t-esc="dualCurrencyRemaining"/>
-                    </span>
-                </t>
-            </div>
+                </div>
+            </section>
         </xpath>
-    </t> -->
+        <xpath expr="//PaymentScreenStatus" position="after">
+            <section t-if="dualCurrencyEnabled" t-attf-class="paymentlines-container border-top pt-3 {{ !isComplete ? 'text-danger' : 'text-success'}}">
+                <div class="payment-status-container d-flex flex-column-reverse flex-lg-row justify-content-between fs-2">
+                    <div class="payment-status-amount d-flex justify-content-between flex-grow-1" t-attf-class=" {{ isIncompleteAndPositive ? 'text-danger' : 'text-success' }}">
+                        <span class="label pe-2" t-out="statusText"/>
+                        <span class="amount align-self-end me-5 pe-5 highlight fw-bolder" t-att-amount="amountText">
+                            <PriceFormatter price="amountText" />
+                        </span>
+                    </div>
+                </div>
+            </section>
+        </xpath>
+    </t>
 </templates>

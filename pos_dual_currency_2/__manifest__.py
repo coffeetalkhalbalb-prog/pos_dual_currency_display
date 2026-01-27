@@ -27,7 +27,6 @@
             'pos_dual_currency_2/static/src/app/screens/product_screen/product_screen.xml',
             'pos_dual_currency_2/static/src/app/screens/payment_screen/payment_screen.js',
             'pos_dual_currency_2/static/src/app/screens/payment_screen/payment_screen.xml',
-            'pos_dual_currency_2/static/src/app/models/res_currency_loader.js',
             'pos_dual_currency_2/static/src/app/models/pos_store.js',
             'pos_dual_currency_2/static/src/css/pos_dual_currency.css',
         ],

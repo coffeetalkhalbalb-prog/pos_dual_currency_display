@@ -60,11 +60,6 @@
     font-size: 14px;
     color: #555;
     margin-top: 5px;
-    font-style: italic;
-}
-
-.pos-receipt .dual-currency-line .label {
-    margin-right: 10px;
 }
 
 .pos-receipt .dual-currency-line .value {

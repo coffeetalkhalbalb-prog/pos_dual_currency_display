@@ -21,11 +21,10 @@
                                         widget="radio" 
                                         invisible="not enable_dual_currency"/>
                                     <field name="dual_currency_rate" 
-                                        invisible="not enable_dual_currency" 
-                                        readonly="dual_currency_rate_type == 'auto'"/>
+                                        invisible="not enable_dual_currency or dual_currency_rate_type == 'auto'"/>
                                     <field name="dual_currency_rounding"
                                         string="Rounding Factor"
-                                        invisible="not enable_dual_currency"/>
+                                        invisible="not enable_dual_currency or dual_currency_rate_type == 'auto'"/>
                                     <field name="dual_currency_position" 
                                         widget="radio" 
                                         invisible="not enable_dual_currency"/>

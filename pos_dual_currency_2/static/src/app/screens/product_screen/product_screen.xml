@@ -6,7 +6,7 @@
                     <div class="dual-currency-total d-flex gap-1 p-2 fw-bolder lh-sm" style="display: flex; justify-content: space-between;">
                         <div />
                         <div>
-                            <span class="total"><t t-esc="pos.dualCurrencyAmount"/><t t-esc="pos.dualCurrencyConfig.currencySymbol"/></span>
+                            <span class="total"><t t-esc="pos.dualCurrencyAmount"/></span>
                         </div>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
         <xpath expr="//button[contains(@class, 'pay-button')]" position="inside">
             <t t-if="pos.isDualCurrencyEnabled()">
                 <br/>
-                <small><t t-esc="pos.dualCurrencyAmount"/> <t t-esc="pos.dualCurrencyConfig.currencySymbol"/></small>
+                <small><t t-esc="pos.dualCurrencyAmount"/></small>
             </t>
         </xpath>
     </t>

@@ -10,19 +10,27 @@ patch(PosStore.prototype, {
     async setup() {
         await super.setup(...arguments);
         this.loadDualCurrencyConfig();
-        console.log(this.dualCurrencyConfig);
         
     },
 
     loadDualCurrencyConfig() {
-        console.log(this.config, this.config.raw);
         const config = this.config.raw;
         if (config.enable_dual_currency && config.dual_currency_id) {
             let rounding = config.dual_currency_rounding || 1;
             let exchangeRate = config.dual_currency_rate || 1.0;
-            if (config.dual_currency_rate_type === 'auto' && config.dual_currency_amount_per_usd) {
-                // If auto, correct the exchange rate based on amount per USD
-                exchangeRate = 1.0 / config.dual_currency_amount_per_usd;
+            if (config.dual_currency_rate_type === 'auto') {
+                const secondaryCurrency = this.models["res.currency"].getBy("id", config.dual_currency_id);
+
+                return this.dualCurrencyConfig = {
+                    enabled: config.enable_dual_currency,
+                    currencyId: secondaryCurrency.id,
+                    currencyName: secondaryCurrency.name,
+                    exchangeRate: secondaryCurrency.rate,
+                    rounding: secondaryCurrency.rounding,
+                    currencySymbol: secondaryCurrency.symbol,
+                    displayPosition: secondaryCurrency.position || 'below',
+                    decimalPlaces: secondaryCurrency.decimal_places || 2
+                };
             }
             this.dualCurrencyConfig = {
                 enabled: config.enable_dual_currency,
@@ -30,7 +38,7 @@ patch(PosStore.prototype, {
                 currencyName: config.dual_currency_id[1],
                 exchangeRate: exchangeRate,
                 rounding: rounding,
-                currencySymbol: this.getCurrencySymbol(config.dual_currency_id[0]),
+                currencySymbol: this.getCurrencySymbol(config.dual_currency_id),
                 displayPosition: config.dual_currency_position || 'below',
                 decimalPlaces: 2
             };
@@ -47,7 +55,6 @@ patch(PosStore.prototype, {
         if (!this.dualCurrencyConfig || !this.dualCurrencyConfig.enabled) {
             return 0;
         }
-        console.log({amount, rate: this.dualCurrencyConfig.exchangeRate});
         
         return amount * this.dualCurrencyConfig.exchangeRate;
     },
@@ -58,15 +65,10 @@ patch(PosStore.prototype, {
         }
 
         let convertedAmount = this.convertToDualCurrency(amount);
-        const currencyId = this.dualCurrencyConfig.currencyId;
-        const currencyRecord = this.models['res.currency']?.get(currencyId) || null;
-        console.log(this.models['res.currency'], currencyRecord);
-        
-        const symbol = this.dualCurrencyConfig.currencySymbol || currencyRecord?.symbol || '';
 
-        let rounding = this.dualCurrencyConfig.rounding || (currencyRecord?.rounding ? Number(currencyRecord.rounding) : 0);
-        let digits = currencyRecord?.digits || [69, 0];
-        let decimals = digits[1];
+        let rounding = this.dualCurrencyConfig.rounding;
+        let digits = this.dualCurrencyConfig.decimalPlaces || [69, 0];
+        let decimals = this.dualCurrencyConfig.decimalPlaces || digits[1];
         if (rounding >= 1) {
             // Round to nearest rounding (e.g. 10,000)
             convertedAmount = Math.round(convertedAmount / rounding) * rounding;
@@ -82,10 +84,10 @@ patch(PosStore.prototype, {
             useGrouping: true,
         });
         let formatted = nf.format(convertedAmount);
-        if (currencyRecord && currencyRecord.position === 'after') {
-            return `${formatted} ${currencyRecord.symbol}`;
+        if (this.dualCurrencyConfig && this.dualCurrencyConfig.currencySymbol && this.dualCurrencyConfig.displayPosition === 'after') {
+            return `${formatted} ${this.dualCurrencyConfig ? this.dualCurrencyConfig.currencySymbol : ''}`;
         } else {
-            return `${currencyRecord ? currencyRecord.symbol : ''} ${formatted}`.trim();
+            return `${this.dualCurrencyConfig ? this.dualCurrencyConfig.currencySymbol : ''} ${formatted}`.trim();
         }
     },
 
@@ -94,19 +96,23 @@ patch(PosStore.prototype, {
         return this.dualCurrencyConfig && this.dualCurrencyConfig.enabled;
     },
 
-    getReceiptHeaderData(order) {
-        const result = super.getReceiptHeaderData(...arguments);
-        
+    async printReceipt({
+        basic = false,
+        order = this.getOrder(),
+        printBillActionTriggered = false,
+    } = {}) {
+        order.dual_currency_data = {};
         if (this.isDualCurrencyEnabled() && order) {
-            const total = order.get_total_with_tax();
-            result.dual_currency_enabled = true;
-            result.dual_currency_symbol = this.dualCurrencyConfig.currencySymbol;
-            result.dual_currency_total = this.formatDualCurrency(total);
-            result.dual_currency_name = this.dualCurrencyConfig.currencyName;
+            const total = order._prices?.original?.taxDetails?.total_amount || 0;
+            order.dual_currency_data.dual_currency_enabled = true;
+            order.dual_currency_data.dual_currency_symbol = this.dualCurrencyConfig.currencySymbol;
+            order.dual_currency_data.dual_currency_rate = this.dualCurrencyConfig.exchangeRate;
+            order.dual_currency_data.dual_currency_total = this.formatDualCurrency(total);
+            order.dual_currency_data.dual_currency_name = this.dualCurrencyConfig.currencyName;
         } else {
-            result.dual_currency_enabled = false;
+            order.dual_currency_data.dual_currency_enabled = false;
         }
-        
-        return result;
+        return super.printReceipt({basic, order, printBillActionTriggered});
+
     },
 });
