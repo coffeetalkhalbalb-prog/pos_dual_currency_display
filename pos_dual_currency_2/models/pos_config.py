@@ -38,6 +38,16 @@ class PosConfig(models.Model):
             else:
                 # Fallback to company currency
                 self.dual_currency_rate = self.dual_currency_id.rate / (company_curr.rate or 1.0)
+    
+    def _get_self_order_config(self):
+        res = super()._get_self_order_config()
+        # Pass your custom values so the JS 'this.selfOrder.config' can see them
+        res.update({
+            'secondary_currency_rate': self.dual_currency_rate,
+            'secondary_currency_symbol': self.dual_currency_id.symbol if self.dual_currency_id else '',
+            'secondary_currency_position': self.dual_currency_position, # if you have it
+        })
+        return res
 
 class ResCurrency(models.Model):
     _inherit = 'res.currency'

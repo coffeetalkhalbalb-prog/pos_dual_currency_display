@@ -13,7 +13,7 @@
         * Configurable exchange rate and currency
     """,
     'author': 'haha',
-    'depends': ['point_of_sale', 'base'],
+    'depends': ['point_of_sale', 'pos_self_order', 'base'],
     'data': [
         'security/ir.model.access.csv',
         'views/pos_config_views.xml',
@@ -29,6 +29,10 @@
             'pos_dual_currency_2/static/src/app/screens/payment_screen/payment_screen.xml',
             'pos_dual_currency_2/static/src/app/models/pos_store.js',
             'pos_dual_currency_2/static/src/css/pos_dual_currency.css',
+        ],
+        'pos_self_order.assets': [
+            'pos_dual_currency_2/static/src/app/screens/self_ordering/self_ordering.js',
+            'pos_dual_currency_2/static/src/app/screens/self_ordering/self_ordering.xml'
         ],
     },
     'installable': True,

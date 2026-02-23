@@ -1,0 +1,17 @@
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_dual_currency.ProductListPage" t-inherit="pos_self_order.ProductListPage" t-inherit-mode="extension">
+        <xpath expr="//span[contains(@class, 'o-so-tabular-nums')]" position="replace">
+            <span class="o-so-tabular-nums fs-4 fw-bold text-primary">
+                <t t-esc="getSecondaryPrice(product)"/>
+            </span>
+        </xpath>
+    </t>
+    <t t-inherit="pos_self_order.OrderWidget" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o-so-tabular-nums') and hasclass('mx-2')]" position="replace">
+            <div class="fs-2 fw-bold o-so-tabular-nums mx-2 text-primary">
+                <!-- This calls the JS function defined in your OrderWidget patch -->
+                <t t-esc="secondaryTotal"/>
+            </div>
+        </xpath>
+    </t>
+</templates>
