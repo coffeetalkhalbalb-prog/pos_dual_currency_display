@@ -14,4 +14,21 @@
             </div>
         </xpath>
     </t>
+
+    <t t-inherit="pos_self_order.CartPage"
+       t-inherit-mode="extension">
+
+        <xpath expr="//div[contains(@class, 'order-price')]//span[contains(@class, 'text-primary')]" position="replace">
+            <span class="text-primary">
+                <t t-esc="this.secondaryTotal"/>
+            </span>
+        </xpath>
+
+        <xpath expr="//div[contains(@class, 'line-price')]" position="replace">
+            <div class="o-so-tabular-nums text-primary fw-bold fs-2">
+                <t t-esc="this.getSecondaryLinePrice(line)"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[contains(@class, 'order-price')]//div[contains(@class, 'text-muted')]" position="replace"></xpath>
+    </t>
 </templates>

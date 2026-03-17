@@ -2,6 +2,7 @@
 
 import { ProductListPage } from "@pos_self_order/app/pages/product_list_page/product_list_page";
 import { OrderWidget } from "@pos_self_order/app/components/order_widget/order_widget";
+import { CartPage } from "@pos_self_order/app/pages/cart_page/cart_page";
 import { patch } from "@web/core/utils/patch";
 
 const mixin = {
@@ -51,5 +52,19 @@ patch(OrderWidget.prototype, {
     get secondaryTotal() {
         const total = this.selfOrder.orderLineNotSend.priceWithTax;
         return this.getFormatedPrice(total);
+    }
+});
+
+patch(CartPage.prototype, {
+    ...mixin,
+
+    get secondaryTotal() {
+        const total = this.selfOrder.orderLineNotSend?.priceWithTax || 0;
+        return this.getFormatedPrice(total);
+    },
+
+    getSecondaryLinePrice(line) {
+        const price = this.getPrice(line) || 0;
+        return this.getFormatedPrice(price);
     }
 });
