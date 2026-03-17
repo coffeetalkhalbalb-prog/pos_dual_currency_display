@@ -59,7 +59,9 @@ patch(CartPage.prototype, {
     ...mixin,
 
     get secondaryTotal() {
-        const total = this.selfOrder.orderLineNotSend?.priceWithTax || 0;
+        const total = this.selfOrder.orderLineNotSend?.priceWithTax 
+                        || this.totalPriceAndTax?.priceWithTax
+                        || 0;
         return this.getFormatedPrice(total);
     },
 
