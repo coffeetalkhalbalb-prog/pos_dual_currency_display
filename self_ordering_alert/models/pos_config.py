@@ -76,7 +76,7 @@ class PosOrder(models.Model):
         message += f"Table {table_num}:\n\n"
 
         for item in changed_items:
-            message += f"{item['quantity']}x {item['product']}\n"
+            message += f"{int(item['quantity'])}x {item['product']}\n"
 
         _logger.info(message)
 
@@ -147,7 +147,7 @@ class PosOrder(models.Model):
         message += f"Table {table_num}:\n\n"
 
         for item in items:
-            message += f"{item['quantity']}x {item['product']}\n"
+            message += f"{int(item['quantity'])} x {item['product']}\n"
 
         _logger.info(message)
 
