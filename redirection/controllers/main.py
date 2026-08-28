@@ -18,12 +18,13 @@ class OnyxRouting(http.Controller):
     @http.route('/', type='http', auth='public', website=True, priority=1000)
     def root_redirect(self, **kwargs):
         if self._is_menu_domain():
-            return request.redirect('/pos-self/1')
+            return request.redirect('/pos-self/1/products')
         return None
 
 class OnyxOrderSecurity(PosSelfOrderController):
 
     def _is_internal(self):
+        return True
         # Get real client IP (Cloudflare first, fallback to direct)
         ip = request.httprequest.headers.get("CF-Connecting-IP") or request.httprequest.remote_addr
 
@@ -37,7 +38,7 @@ class OnyxOrderSecurity(PosSelfOrderController):
 
             # 🔧 Adjust networks if needed
             allowed_networks = [
-                "185.217.184.0/24",  # public WiFi
+                "185.217.185.9/24",  # public WiFi
                 "192.168.1.0/24"            
             ]
 

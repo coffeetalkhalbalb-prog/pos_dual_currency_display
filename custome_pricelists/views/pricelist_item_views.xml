@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record
+        id="product_pricelist_item_form_view_margin_percentage"
+        model="ir.ui.view"
+    >
+        <field name="name">product.pricelist.item.form.margin.percentage</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='base']" position="after">
+
+                <label
+                    for="margin_percentage"
+                    string="Margin %"
+                    invisible="base != 'cost_sales_average'"
+                />
+
+                <div
+                    class="o_row"
+                    invisible="base != 'cost_sales_average'"
+                >
+                    <field name="margin_percentage"/>
+                    <span>%</span>
+                </div>
+
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
